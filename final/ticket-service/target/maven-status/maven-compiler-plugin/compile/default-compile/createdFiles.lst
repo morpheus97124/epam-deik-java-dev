@@ -1,0 +1,7 @@
+com\epam\training\ticketservice\core\accounts\Permission.class
+com\epam\training\ticketservice\core\movies\Movies.class
+com\epam\training\ticketservice\Application.class
+com\epam\training\ticketservice\core\accounts\Account.class
+com\epam\training\ticketservice\core\accounts\AccountsInitializer.class
+com\epam\training\ticketservice\core\accounts\UserRepository.class
+com\epam\training\ticketservice\shell\ShellCommand.class
