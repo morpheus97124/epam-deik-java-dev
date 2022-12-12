@@ -1,5 +1,6 @@
 package com.epam.training.ticketservice.shell;
 
+import com.epam.training.ticketservice.Application;
 import com.epam.training.ticketservice.core.accounts.Account;
 import com.epam.training.ticketservice.core.accounts.AccountService;
 import com.epam.training.ticketservice.core.accounts.Permission;
@@ -7,8 +8,10 @@ import com.epam.training.ticketservice.core.dto.AccountDto;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.SpringApplication;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
+import org.springframework.shell.standard.commands.Quit;
 
 import java.util.Optional;
 
@@ -57,6 +60,11 @@ public class AccountCommand {
     @ShellMethod(value = "Sign out admin", key = "sign out")
     public void signOut(){
         accountService.signOutAdmin();
+    }
 
+
+    @ShellMethod(value = "Shutdown application", key = "exit")
+    public void exit(){
+        System.exit(0);
     }
 }

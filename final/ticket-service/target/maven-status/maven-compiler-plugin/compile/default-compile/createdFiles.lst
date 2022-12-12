@@ -1,7 +1,13 @@
+com\epam\training\ticketservice\core\accounts\AccountService.class
 com\epam\training\ticketservice\core\accounts\Permission.class
-com\epam\training\ticketservice\core\movies\Movies.class
 com\epam\training\ticketservice\Application.class
 com\epam\training\ticketservice\core\accounts\Account.class
-com\epam\training\ticketservice\core\accounts\AccountsInitializer.class
-com\epam\training\ticketservice\core\accounts\UserRepository.class
 com\epam\training\ticketservice\shell\ShellCommand.class
+com\epam\training\ticketservice\JPAConfig.class
+com\epam\training\ticketservice\core\accounts\AccountServiceImpl.class
+com\epam\training\ticketservice\shell\AccountCommand.class
+com\epam\training\ticketservice\core\movies\Movies.class
+com\epam\training\ticketservice\core\accounts\AccountRepository.class
+com\epam\training\ticketservice\core\accounts\AccountsInitializer.class
+com\epam\training\ticketservice\core\dto\AccountDto.class
+com\epam\training\ticketservice\shell\TheaterPrompt.class
