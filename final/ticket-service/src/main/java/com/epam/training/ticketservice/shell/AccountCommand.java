@@ -1,28 +1,17 @@
 package com.epam.training.ticketservice.shell;
 
-import com.epam.training.ticketservice.Application;
-import com.epam.training.ticketservice.core.accounts.Account;
 import com.epam.training.ticketservice.core.accounts.AccountService;
-import com.epam.training.ticketservice.core.accounts.Permission;
 import com.epam.training.ticketservice.core.dto.AccountDto;
 import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.SpringApplication;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
-import org.springframework.shell.standard.commands.Quit;
-
 import java.util.Optional;
 
 @ShellComponent
 @AllArgsConstructor
-//@RequiredArgsConstructor
 public class AccountCommand {
-    AccountService accountService;
 
-    //@Autowired
-    //AccountDto lastAccount;
+    AccountService accountService;
 
     @ShellMethod(value = "Login command for the user", key = "sign in")
     public String login(final String name, final String password){
@@ -30,10 +19,7 @@ public class AccountCommand {
         if(accountDto.isEmpty()){
             return "Login failed due to incorrect credentials";
         }
-        else{
-            //lastAccount = accountDto.get();
-            return String.format("%s has signed in", accountDto.get());
-        }
+        return null;
     }
 
     @ShellMethod(value = "Login command for the admin", key = "sign in priviliged")
@@ -42,9 +28,7 @@ public class AccountCommand {
         if(accountDto.isEmpty()){
             return "Login failed due to incorrect credentials";
         }
-        else{
-            return String.format("%s has signed in", accountDto.get());
-        }
+        return null;
     }
 
     @ShellMethod(value = "Describe if admin account is logged in or not", key = "describe account")

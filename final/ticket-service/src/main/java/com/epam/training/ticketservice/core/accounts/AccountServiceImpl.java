@@ -1,14 +1,9 @@
 package com.epam.training.ticketservice.core.accounts;
 
 import com.epam.training.ticketservice.core.dto.AccountDto;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.AutoConfigureOrder;
 import org.springframework.stereotype.Service;
-import com.epam.training.ticketservice.core.accounts.Account;
-
 import java.util.Optional;
 
 @Service

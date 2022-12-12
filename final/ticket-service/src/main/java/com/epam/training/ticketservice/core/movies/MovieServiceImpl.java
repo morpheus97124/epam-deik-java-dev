@@ -1,7 +1,6 @@
 package com.epam.training.ticketservice.core.movies;
 
 import com.epam.training.ticketservice.core.accounts.AccountService;
-import com.epam.training.ticketservice.core.dto.MovieDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,17 +12,14 @@ public class MovieServiceImpl implements MovieService{
 
     @Autowired
     private final MovieRepository movieRepository;
-    private MovieDto activeMovie = null;
 
-    /**/
     @Autowired
     AccountService accountService;
-    /**/
 
     @Override
     public void createMovie(String title, Movie.genres genre, int length){
         if(accountService.IsAdminOnline()){
-            Movie movie = new Movie(title, genre, length);//TODO HANDLE INVALID OUTPUT
+            Movie movie = new Movie(title, genre, length);
             movieRepository.save(movie);
         }
         else{
@@ -43,7 +39,6 @@ public class MovieServiceImpl implements MovieService{
                 movie.get().setLength(length);
                 movieRepository.save(movie.get());
             }
-            //TODO HANDLE INVALID OUTPUT
         }
         else{
             System.out.println("ADMIN IS OFFLINE\nCan't update movie");

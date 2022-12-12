@@ -2,7 +2,6 @@ package com.epam.training.ticketservice.core.rooms;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -15,7 +14,7 @@ public class Room {
 
     @Id
     @GeneratedValue
-    private int Id;
+    private Long Id;
 
     @Column(unique = true)
     private String name;
