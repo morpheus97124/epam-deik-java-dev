@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureOrder;
 import org.springframework.stereotype.Service;
+import com.epam.training.ticketservice.core.accounts.Account;
 
 import java.util.Optional;
 
@@ -25,8 +26,54 @@ public class AccountServiceImpl implements AccountService {
             return Optional.empty();
         }
         else{
-            activeAccount = new AccountDto(activeAccount.getName(), account.get().getPermission());
-            return Optional.of(activeAccount);
+            activeAccount = new AccountDto(account.get().getName(), account.get().getPermission(), account.get().isLoggedIn());
+            if(activeAccount.getPermission().equals(Permission.USER)){
+                account.get().setLoggedIn(true);
+                accountRepository.save(account.get());
+                return Optional.of(activeAccount);
+            }
+            else{
+                return Optional.empty();
+            }
+        }
+    }
+
+    @Override
+    public Optional<AccountDto> loginPriviliged(String name, String password) {
+        final Optional<Account> account = accountRepository.findByNameAndPassword(name, password);
+        if(account.isEmpty()){
+            return Optional.empty();
+        }
+        else{
+            activeAccount = new AccountDto(account.get().getName(), account.get().getPermission(), account.get().isLoggedIn());
+            if(activeAccount.getPermission().equals(Permission.ADMIN)){
+                account.get().setLoggedIn(true);
+                accountRepository.save(account.get());
+                return Optional.of(activeAccount);
+            }
+            else{
+                return Optional.empty();
+            }
+        }
+    }
+
+    @Override
+    public boolean IsAdminOnline() {
+        final Optional<Account> account = accountRepository.findByNameAndPassword("admin", "admin");
+        if(account.isEmpty()){
+            return false;
+        }
+        else{
+            return account.get().isLoggedIn();
+        }
+    }
+
+    @Override
+    public void signOutAdmin() {
+        final Optional<Account> account = accountRepository.findByNameAndPassword("admin", "admin");
+        if(!account.isEmpty()){
+            account.get().setLoggedIn(false);
+            accountRepository.save(account.get());
         }
     }
 }

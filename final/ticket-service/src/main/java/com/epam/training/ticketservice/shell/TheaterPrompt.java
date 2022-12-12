@@ -8,6 +8,6 @@ import org.springframework.stereotype.Component;
 public class TheaterPrompt implements PromptProvider {
     @Override
     public AttributedString getPrompt() {
-        return new AttributedString("Csilli-villi filmszinhaz:~$ ");
+        return new AttributedString("Ticket service>");
     }
 }

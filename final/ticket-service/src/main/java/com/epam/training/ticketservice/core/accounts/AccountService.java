@@ -8,4 +8,12 @@ import java.util.Optional;
 public interface AccountService {
 
     Optional<AccountDto> login(String name, String password);
+
+    Optional<AccountDto> loginPriviliged(String name, String password);
+
+    boolean IsAdminOnline();
+
+    void signOutAdmin();
+
+    //Optional<AccountDto> returnAccountDto(String name);
 }
