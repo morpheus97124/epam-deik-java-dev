@@ -15,7 +15,7 @@ public class Movie {
     public enum genres{
         action,
         adventure,
-        animate,
+        animation,
         comedy,
         drama,
         fantasy,

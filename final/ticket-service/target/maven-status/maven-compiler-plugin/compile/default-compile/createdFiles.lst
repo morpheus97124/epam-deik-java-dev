@@ -6,7 +6,6 @@ com\epam\training\ticketservice\Application.class
 com\epam\training\ticketservice\core\movies\MovieRepository.class
 com\epam\training\ticketservice\core\accounts\Account.class
 com\epam\training\ticketservice\shell\MovieCommand.class
-com\epam\training\ticketservice\shell\ShellCommand.class
 com\epam\training\ticketservice\JPAConfig.class
 com\epam\training\ticketservice\core\movies\Movie.class
 com\epam\training\ticketservice\core\accounts\AccountServiceImpl.class
@@ -24,6 +23,5 @@ com\epam\training\ticketservice\core\screenings\ScreeningServiceImpl.class
 com\epam\training\ticketservice\core\rooms\Room.class
 com\epam\training\ticketservice\shell\RoomCommand.class
 com\epam\training\ticketservice\shell\AccountCommand.class
-com\epam\training\ticketservice\core\dto\MovieDto.class
 com\epam\training\ticketservice\core\screenings\ScreeningService.class
 com\epam\training\ticketservice\core\movies\MovieServiceImpl.class

@@ -98,23 +98,25 @@ public class ScreeningServiceImpl implements ScreeningService{
     String handleOverlap(Screening screening){
         Calendar calendar = Calendar.getInstance();
         for(Screening existingScreening : screeningRepository.findAll()){
-            Date existingScreeningStart = existingScreening.getStartDate();
-            calendar.setTime(existingScreeningStart);
-            Date existingScreeningEnd = DateUtils.addMinutes(existingScreeningStart,existingScreening.getMovie().getLength());
-            Date screeningStart = screening.getStartDate();
-            calendar.setTime(screeningStart);
-            Date screeningEnds = DateUtils.addMinutes(screeningStart, screening.getMovie().getLength());
-            if(existingScreeningStart.before(screeningEnds) &&
-                screeningStart.before(existingScreeningEnd)){
-                return "There is an overlapping screening";
-            }
-            Date existingBreakEnd = DateUtils.addMinutes(existingScreeningEnd,10);
-            if(existingScreeningStart.before(screeningEnds) &&
-                    screeningStart.before(existingBreakEnd)){
-                return "This would start in the break period after another screening in this room";
+            if(existingScreening.getRoom().equals(screening.getRoom())){
+                Date existingScreeningStart = existingScreening.getStartDate();
+                calendar.setTime(existingScreeningStart);
+                Date existingScreeningEnd = DateUtils.addMinutes(existingScreeningStart,existingScreening.getMovie().getLength());
+                Date screeningStart = screening.getStartDate();
+                calendar.setTime(screeningStart);
+                Date screeningEnds = DateUtils.addMinutes(screeningStart, screening.getMovie().getLength());
+                if(existingScreeningStart.before(screeningEnds) &&
+                        screeningStart.before(existingScreeningEnd)){
+                    return "There is an overlapping screening";
+                }
+                Date existingBreakEnd = DateUtils.addMinutes(existingScreeningEnd,10);
+                if(existingScreeningStart.before(screeningEnds) &&
+                        screeningStart.before(existingBreakEnd)){
+                    return "This would start in the break period after another screening in this room";
+                }
             }
         }
         screeningRepository.save(screening);
-        return "";
+        return null;//return "";
     }
 }

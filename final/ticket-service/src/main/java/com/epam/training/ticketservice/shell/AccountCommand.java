@@ -22,8 +22,8 @@ public class AccountCommand {
         return null;
     }
 
-    @ShellMethod(value = "Login command for the admin", key = "sign in priviliged")
-    public String loginPriviliged(final String name, final String password){
+    @ShellMethod(value = "Login command for the admin", key = "sign in privileged")
+    public String loginPrivileged(final String name, final String password){
         final Optional<AccountDto> accountDto = accountService.loginPriviliged(name, password);
         if(accountDto.isEmpty()){
             return "Login failed due to incorrect credentials";
