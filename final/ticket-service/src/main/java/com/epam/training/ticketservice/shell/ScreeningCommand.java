@@ -17,8 +17,8 @@ public class ScreeningCommand {
     }
 
     @ShellMethod(value = "Delete screaning", key = "delete screening")
-    public void updateScreening(String movieTitle, String roomName, String startDate){
-        screeningService.deleteScreening(movieTitle, roomName, startDate);
+    public String updateScreening(String movieTitle, String roomName, String startDate){
+        return screeningService.deleteScreening(movieTitle, roomName, startDate);
     }
 
     @ShellMethod(value = "List all screenings", key = "list screenings")

@@ -6,5 +6,5 @@ public interface ScreeningService {
 
     String listAllScreenings();
 
-    void deleteScreening(String movieTitle, String roomName, String startDate);
+    String deleteScreening(String movieTitle, String roomName, String startDate);
 }

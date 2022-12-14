@@ -60,23 +60,29 @@ public class ScreeningServiceImpl implements ScreeningService{
 
         }
         else{
-            return "ADMIN IS OFFLINE\nCant create screening room";
+            return "ADMIN IS OFFLINE\nCant create screening";
         }
     }
 
     @Override
-    public void deleteScreening(String movieTitle, String roomName, String startDate) {
-        Date date = null;
-        try{
-            date = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(startDate);
-        }catch (ParseException e){
-            System.out.println("Not a valid date");
-            System.out.println(e.getMessage());
+    public String deleteScreening(String movieTitle, String roomName, String startDate) {
+        if(accountService.IsAdminOnline()){
+            Date date = null;
+            try{
+                date = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(startDate);
+            }catch (ParseException e){
+                System.out.println("Not a valid date");
+                System.out.println(e.getMessage());
+            }
+            Optional<Screening> screening = screeningRepository.findScreeningByMovieTitleAndRoomNameAndAndStartDate(
+                    movieTitle,roomName,date);
+            if(!screening.isEmpty()){
+                screeningRepository.delete(screening.get());
+            }
+            return null;
         }
-        Optional<Screening> screening = screeningRepository.findScreeningByMovieTitleAndRoomNameAndAndStartDate(
-                movieTitle,roomName,date);
-        if(!screening.isEmpty()){
-            screeningRepository.delete(screening.get());
+        else {
+            return "ADMIN IS OFFLINE\nCant delete screening";
         }
     }
 

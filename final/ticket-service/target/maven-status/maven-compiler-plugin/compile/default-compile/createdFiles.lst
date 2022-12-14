@@ -1,6 +1,8 @@
+com\epam\training\ticketservice\core\screenings\ScreeningServiceImplTest.class
 com\epam\training\ticketservice\core\accounts\Permission.class
 com\epam\training\ticketservice\core\movies\Movie$genres.class
 com\epam\training\ticketservice\core\rooms\RoomService.class
+com\epam\training\ticketservice\core\movies\MovieServiceImplTest.class
 com\epam\training\ticketservice\core\rooms\RoomRepository.class
 com\epam\training\ticketservice\Application.class
 com\epam\training\ticketservice\core\movies\MovieRepository.class
@@ -20,6 +22,7 @@ com\epam\training\ticketservice\core\accounts\AccountService.class
 com\epam\training\ticketservice\core\screenings\Screening.class
 com\epam\training\ticketservice\core\rooms\RoomServiceImpl.class
 com\epam\training\ticketservice\core\screenings\ScreeningServiceImpl.class
+com\epam\training\ticketservice\core\rooms\RoomServiceImplTest.class
 com\epam\training\ticketservice\core\rooms\Room.class
 com\epam\training\ticketservice\shell\RoomCommand.class
 com\epam\training\ticketservice\shell\AccountCommand.class

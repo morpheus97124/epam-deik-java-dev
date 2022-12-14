@@ -11,6 +11,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
+import java.util.OptionalInt;
 
 //@ExtendWith(MockitoExtension.class)
 //@DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
@@ -31,7 +32,7 @@ class AccountServiceImplTest {
     }*/
 
     @Test
-    void login() {
+    void loginWithCorrectCredentials() {
         //Given
         Optional<AccountDto> accountDto = Optional.of(new AccountDto("kisbela19", Permission.USER, true));
         //When
@@ -39,16 +40,56 @@ class AccountServiceImplTest {
         //Then
         Assertions.assertEquals(accountDto, actualAccountDto);
     }
-
     @Test
-    void loginPriviliged() {
+    void loginWithIncorrectCredentials() {
+        //Given
+        //When
+        final Optional<AccountDto> actualAccountDto = underTest.login("kisbela9", "lamborghini");
+        //Then
+        Assertions.assertEquals(Optional.empty(), actualAccountDto);
     }
-
     @Test
-    void isAdminOnline() {
+    void loginWithPrivilegedCorrectCredentials() {
+        //Given
+        Optional<AccountDto> accountDto = Optional.of(new AccountDto("admin", Permission.ADMIN, true));
+        //When
+        final Optional<AccountDto> actualAccountDto = underTest.loginPriviliged("admin", "admin");
+        //Then
+        Assertions.assertEquals(accountDto, actualAccountDto);
     }
-
+    @Test
+    void loginWithPrivilegedIncorrectCredentials() {
+        //Given
+        //When
+        final Optional<AccountDto> actualAccountDto = underTest.loginPriviliged("admin", "lamborghini");
+        //Then
+        Assertions.assertEquals(Optional.empty(), actualAccountDto);
+    }
+    @Test
+    void isAdminOnlineTrue() {
+        //Given
+        underTest.loginPriviliged("admin", "admin");
+        //When
+        boolean actualBoolean = underTest.IsAdminOnline();
+        //Then
+        Assertions.assertEquals(true, actualBoolean);
+    }
+    @Test
+    void isAdminOnlineFalse() {
+        //Given
+        //When
+        boolean actualBoolean = underTest.IsAdminOnline();
+        //Then
+        Assertions.assertEquals(false, actualBoolean);
+    }
     @Test
     void signOutAdmin() {
+        //Given
+        underTest.loginPriviliged("admin", "admin");
+        //When
+        underTest.signOutAdmin();
+        boolean actualBoolean = underTest.IsAdminOnline();
+        //Then
+        Assertions.assertEquals(false, actualBoolean);
     }
 }
