@@ -14,6 +14,10 @@ public class AccountServiceImpl implements AccountService {
     private final AccountRepository accountRepository;
     private AccountDto activeAccount = null;
 
+    /*public AccountServiceImpl(AccountRepository accountRepository){
+        this.accountRepository = accountRepository;
+    }*/
+
     @Override
     public Optional<AccountDto> login(final String name, final String password) {
         final Optional<Account> account = accountRepository.findByNameAndPassword(name, password);
