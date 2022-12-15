@@ -23,6 +23,7 @@ class MovieServiceImplTest {
     @Mock
     AccountRepository accountRepository;
 
+    @Mock
     AccountService accountService;
 
     @BeforeEach
