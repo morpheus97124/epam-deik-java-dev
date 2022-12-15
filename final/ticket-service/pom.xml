@@ -263,5 +263,6 @@
                 </executions>
             </plugin>
         </plugins>
+        <testSourceDirectory>src/main/test/java</testSourceDirectory>
     </build>
 </project>
