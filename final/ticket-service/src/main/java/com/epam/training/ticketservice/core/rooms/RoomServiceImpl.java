@@ -10,11 +10,9 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class RoomServiceImpl implements RoomService{
 
-    @Autowired
     private final RoomRepository roomRepository;
 
-    @Autowired
-    AccountService accountService;
+    private final AccountService accountService;
 
     @Override
     public void createRoom(String name, int rowNum, int colNum) {
