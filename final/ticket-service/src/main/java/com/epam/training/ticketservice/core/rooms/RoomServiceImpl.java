@@ -2,7 +2,6 @@ package com.epam.training.ticketservice.core.rooms;
 
 import com.epam.training.ticketservice.core.accounts.AccountService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.Optional;
 

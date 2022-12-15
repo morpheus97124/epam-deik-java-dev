@@ -19,17 +19,13 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ScreeningServiceImpl implements ScreeningService{
 
-    @Autowired
-    AccountService accountService;
+    private final AccountService accountService;
 
-    @Autowired
-    ScreeningRepository screeningRepository;
+    private final ScreeningRepository screeningRepository;
 
-    @Autowired
-    MovieRepository movieRepository;
+    private final MovieRepository movieRepository;
 
-    @Autowired
-    RoomRepository roomRepository;
+    private final RoomRepository roomRepository;
 
     @Override
     public String createScreening(String movieTitle, String roomName, String startDate) {
@@ -37,12 +33,12 @@ public class ScreeningServiceImpl implements ScreeningService{
             //get movie
             Optional<Movie> movie = movieRepository.findByTitle(movieTitle);
             if(movie.isEmpty()){
-                System.out.println("No movie by that title");
+                return "No movie by that title";
             }
             //get room
             Optional<Room> room = roomRepository.findByName(roomName);
             if(room.isEmpty()){
-                System.out.println("No room by that name");
+                return "No room by that name";
             }
             //translate date
             Date date = null;

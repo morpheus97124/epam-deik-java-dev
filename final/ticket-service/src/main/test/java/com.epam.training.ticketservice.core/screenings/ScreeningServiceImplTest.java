@@ -1,27 +1,43 @@
 package com.epam.training.ticketservice.core.screenings;
 
+import com.epam.training.ticketservice.core.accounts.AccountRepository;
 import com.epam.training.ticketservice.core.accounts.AccountService;
 import com.epam.training.ticketservice.core.movies.Movie;
 import com.epam.training.ticketservice.core.movies.MovieRepository;
 import com.epam.training.ticketservice.core.rooms.Room;
 import com.epam.training.ticketservice.core.rooms.RoomRepository;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-
+import org.mockito.BDDMockito;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
-
-import static org.junit.jupiter.api.Assertions.*;
+import java.util.List;
+import java.util.Optional;
 
 class ScreeningServiceImplTest {
 
+    ScreeningServiceImpl underTest;
+
+    @Mock
     AccountService accountService;
 
-    ScreeningServiceImpl underTest;
+    @Mock
+    AccountRepository accountRepository;
+
+    @Mock
+    ScreeningRepository screeningRepository;
+
+    @Mock
+    MovieRepository movieRepository;
+
+    @Mock
+    RoomRepository roomRepository;
 
     Movie movie;
     Room room;
@@ -44,6 +60,10 @@ class ScreeningServiceImplTest {
 
     @BeforeEach
     void setUp() throws ParseException {
+
+        MockitoAnnotations.openMocks(this);
+        underTest = new ScreeningServiceImpl(accountService, screeningRepository, movieRepository, roomRepository);
+
         movie = new Movie("Sátántangó", Movie.genres.drama, 450);
         room = new Room("Pedersoli", 10, 10);
         sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
@@ -57,10 +77,10 @@ class ScreeningServiceImplTest {
         date3 = sdf.parse(date3str);//Starts during break
         screening3 = new Screening(movie, room, date3);
 
-        date4 = sdf.parse(date3str);//Next day
+        date4 = sdf.parse(date4str);//Next day
         screening4 = new Screening(movie, room, date4);
 
-        date5 = sdf.parse(date3str);//Day after that
+        date5 = sdf.parse(date5str);//Day after that
         screening5 = new Screening(movie, room, date5);
 
     }
@@ -68,96 +88,125 @@ class ScreeningServiceImplTest {
     @Test
     void createScreeningWhenAdminOnlineAndWrongTitle() {
         //Given
-        underTest.accountService.loginPriviliged("admin", "admin");
+        BDDMockito.given(accountService.IsAdminOnline()).willReturn(true);
         //When
-        String actualStr = underTest.createScreening(movie.getTitle()+"x", room.getName(), date1str);
+        String actualStr = underTest.createScreening(movie.getTitle()+"x", room.getName()+"x", date1str);
         //Then
         Assertions.assertEquals("No movie by that title", actualStr);
+        Mockito.verify(screeningRepository, Mockito.never()).save(screening1);
     }
     @Test
     void createScreeningWhenAdminOnlineAndWrongRoomName() {
         //Given
-        underTest.accountService.loginPriviliged("admin", "admin");
+        BDDMockito.given(accountService.IsAdminOnline()).willReturn(true);
+        BDDMockito.given(movieRepository.findByTitle(movie.getTitle())).willReturn(Optional.ofNullable(movie));
         //When
         String actualStr = underTest.createScreening(movie.getTitle(), room.getName()+"x", date1str);
         //Then
         Assertions.assertEquals("No room by that name", actualStr);
+        Mockito.verify(screeningRepository, Mockito.never()).save(screening1);
     }
     @Test
     void createScreeningWhenAdminOnline() {
         //Given
-        underTest.accountService.loginPriviliged("admin", "admin");
+        BDDMockito.given(accountService.IsAdminOnline()).willReturn(true);
+        BDDMockito.given(movieRepository.findByTitle(movie.getTitle())).willReturn(Optional.ofNullable(movie));
+        BDDMockito.given(roomRepository.findByName(room.getName())).willReturn(Optional.of(room));
         //When
-        String actualStr = underTest.createScreening(movie.getTitle(), room.getName(), date1str);
+        underTest.createScreening(movie.getTitle(), room.getName(), date1str);
         //Then
-        Assertions.assertEquals(null, actualStr);
+        //Assertions.assertEquals(null, actualStr);
+        Mockito.verify(screeningRepository).save(screening1);
     }
     @Test
     void createScreeningWhenAdminOffline() {
         //Given
+        BDDMockito.given(accountService.IsAdminOnline()).willReturn(false);
         //When
         String actualStr = underTest.createScreening(movie.getTitle(), room.getName(), date1str);
         //Then
         Assertions.assertEquals("ADMIN IS OFFLINE\nCant create screening", actualStr);
+        Mockito.verify(screeningRepository, Mockito.never()).save(screening1);
     }
-    @Test
+   @Test
     void deleteScreeningWhenAdminOnline() {
-        //Given
-        underTest.accountService.loginPriviliged("admin", "admin");
-        underTest.createScreening(movie.getTitle(), room.getName(), date1str);
-        //When
-        String actualStr = underTest.deleteScreening(movie.getTitle(), room.getName(), date1str);
-        //Then
-        Assertions.assertEquals(null, actualStr);
+       //Given
+       BDDMockito.given(accountService.IsAdminOnline()).willReturn(true);
+       BDDMockito.given(movieRepository.findByTitle(movie.getTitle())).willReturn(Optional.ofNullable(movie));
+       BDDMockito.given(roomRepository.findByName(room.getName())).willReturn(Optional.of(room));
+       BDDMockito.given(screeningRepository.
+               findScreeningByMovieTitleAndRoomNameAndAndStartDate(movie.getTitle(),
+                       room.getName(), date1)).willReturn(Optional.ofNullable(screening1));
+       //When
+       underTest.deleteScreening(movie.getTitle(), room.getName(), date1str);
+       //Then
+       //Assertions.assertEquals(null, actualStr);
+       Mockito.verify(screeningRepository).delete(screening1);
     }
     @Test
     void deleteScreeningWhenAdminOffline() {
         //Given
-        underTest.accountService.loginPriviliged("admin", "admin");
-        underTest.createScreening(movie.getTitle(), room.getName(), date1str);
-        underTest.accountService.signOutAdmin();
-        //When
-        String actualStr = underTest.deleteScreening(movie.getTitle(), room.getName(), date1str);
-        //Then
-        Assertions.assertEquals("ADMIN IS OFFLINE\nCant delete screening", actualStr);
+       BDDMockito.given(accountService.IsAdminOnline()).willReturn(false);
+       BDDMockito.given(movieRepository.findByTitle(movie.getTitle())).willReturn(Optional.ofNullable(movie));
+       BDDMockito.given(roomRepository.findByName(room.getName())).willReturn(Optional.of(room));
+       BDDMockito.given(screeningRepository.
+               findScreeningByMovieTitleAndRoomNameAndAndStartDate(movie.getTitle(),
+                       room.getName(), date1)).willReturn(Optional.ofNullable(screening1));
+       //When
+       underTest.deleteScreening(movie.getTitle(), room.getName(), date1str);
+       //Then
+       //Assertions.assertEquals(null, actualStr);
+       Mockito.verify(screeningRepository,Mockito.never()).delete(screening1);
     }
     @Test
     void listAllScreenings() {
         //Given
-        underTest.accountService.loginPriviliged("admin", "admin");
-        underTest.createScreening(movie.getTitle(), room.getName(), date1str);
-        underTest.createScreening(movie.getTitle(), room.getName(), date4str);
-        underTest.createScreening(movie.getTitle(), room.getName(), date5str);
+        List<Screening> list = new ArrayList<Screening>();
+        list.add(screening1);
+        list.add(screening4);
+        list.add(screening5);
+        BDDMockito.given(screeningRepository.findAll()).willReturn(list);
         String str = screening1 + "\n" + screening4 + "\n" + screening5;
         //When
         String actualStr = underTest.listAllScreenings();
         //Then
         Assertions.assertEquals(str, actualStr);
+        Mockito.verify(screeningRepository).findAll();
     }
     @Test
     void handleOverlapWhenNoOverlap() {
         //Given
+        List<Screening> list = new ArrayList<Screening>();
+        list.add(screening1);
+        BDDMockito.given(screeningRepository.findAll()).willReturn(list);
         //When
-        String actualStr = underTest.handleOverlap(screening1);
+        String actualStr = underTest.handleOverlap(screening4);
         //Then
         Assertions.assertEquals(null, actualStr);
+        Mockito.verify(screeningRepository).save(screening4);
     }
     @Test
     void handleOverlapWhenOverlap() {
         //Given
-        underTest.createScreening(screening1.getMovie().getTitle(), screening1.getRoom().getName(), date1str);
+        List<Screening> list = new ArrayList<Screening>();
+        list.add(screening1);
+        BDDMockito.given(screeningRepository.findAll()).willReturn(list);
         //When
-        String actualStr = underTest.createScreening(screening2.getMovie().getTitle(), screening2.getRoom().getName(), date2str);
+        String actualStr = underTest.handleOverlap(screening2);
         //Then
         Assertions.assertEquals("There is an overlapping screening", actualStr);
+        Mockito.verify(screeningRepository, Mockito.never()).save(screening2);
     }
     @Test
     void handleOverlapWhenOverlapInBreak() {
         //Given
-        underTest.createScreening(screening1.getMovie().getTitle(), screening1.getRoom().getName(), date1str);
+        List<Screening> list = new ArrayList<Screening>();
+        list.add(screening1);
+        BDDMockito.given(screeningRepository.findAll()).willReturn(list);
         //When
-        String actualStr = underTest.createScreening(screening3.getMovie().getTitle(), screening3.getRoom().getName(), date3str);
+        String actualStr = underTest.handleOverlap(screening3);
         //Then
-        Assertions.assertEquals("There is an overlapping screening", actualStr);
+        Assertions.assertEquals("This would start in the break period after another screening in this room", actualStr);
+        Mockito.verify(screeningRepository, Mockito.never()).save(screening3);
     }
 }
